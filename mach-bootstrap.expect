@@ -1,0 +1,19 @@
+#!/usr/bin/expect -f
+
+set timeout -1
+
+spawn ./mach bootstrap
+
+expect "choice:"
+
+send -- "2\r"
+
+expect "choice:"
+
+send -- "2\r"
+
+expect "continue? [Y/n]"
+
+send -- "Y\r"
+
+expect eof

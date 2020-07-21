@@ -1,0 +1,35 @@
+# build.earth
+# FIXME: Need Debian testing to get an up-to-date version of Mercurial...but
+# testing no longer has the Python packages demanded by "bootstrap"
+FROM debian:stable
+
+# Just install enough to get the boostrap script running. Bootstrap
+# script will install more packages.
+RUN apt-get -y update
+RUN apt-get -y install expect python3 python3-pip wget
+
+WORKDIR /code
+
+prebootstrap:
+  RUN wget https://hg.mozilla.org/mozilla-unified/raw-file/default/python/mozboot/bin/bootstrap.py
+
+  # Just get the (many) packages so this time-consuming step will cache.
+  # We will try to finish bootstrap in a later step.
+  RUN echo 2 | python3 bootstrap.py --no-interactive || true
+  SAVE IMAGE
+
+code:
+  FROM +prebootstrap
+  COPY mozilla-central mozilla-central
+#  COPY mach-bootstrap.expect mach-bootstrap.expect
+#  RUN wget https://hg.mozilla.org/mozilla-unified/raw-file/default/python/mozboot/bin/bootstrap.py
+  SAVE IMAGE
+
+build:
+  FROM +code
+
+  # Environment variable used by "mach bootstrap" to detect the platform
+  ENV SHELL /bin/bash
+
+  RUN (cd mozilla-central && ./mach build)
+
