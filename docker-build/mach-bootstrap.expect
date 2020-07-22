@@ -8,12 +8,6 @@ expect "choice:"
 
 send -- "2\r"
 
-# FIXME -- create this directory, make sure it goes the same cached and uncached.
-
-# expect "create this directory? (Yn):"
-
-# send -- "\r"
-
 expect "configured? (Yn):"
 
 send -- "n\r"
