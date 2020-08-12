@@ -3,18 +3,20 @@
 FROM debian:stable
 ENV TERM linux
 ENV SHELL /bin/bash
-RUN DEBIAN_FRONTEND=noninteractive apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install expect python python3 python-pip python3-pip wget
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libasound2-dev libcurl4-openssl-dev libdbus-1-dev libdbus-glib-1-dev libdrm-dev libgtk-3-dev libgtk2.0-dev libpulse-dev libx11-xcb-dev libxt-dev xvfb yasm nasm mercurial mercurial-common openssh-client unzip zip autoconf2.13
-RUN DEBIAN_FRONTEND=noninteractive apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get -y update  && \
+    apt-get -y install curl expect python3 && \
+    apt-get clean 
+
+# RUN apt-get -y install autoconf2.13 build-essential nodejs unzip uuid zip
+
 
 WORKDIR /code
 ENV SHELL /bin/bash
 
-# COPY mozilla-central /code/
-# RUN ls /code
-RUN wget https://hg.mozilla.org/mozilla-unified/raw-file/default/python/mozboot/bin/bootstrap.py -O /code/bootstrap.py
+RUN curl -o /code/bootstrap.py https://hg.mozilla.org/mozilla-unified/raw-file/default/python/mozboot/bin/bootstrap.py 
 
+# Install required native packages. This will fail because
+# the mozilla-central checkout (which will go in mozilla-central) isn't there yet.
 RUN echo 2 | python3 /code/bootstrap.py --no-interactive || true
 
 COPY build-firefox.sh /code

@@ -2,8 +2,9 @@
 
 export PATH="$PATH:/root/.local/bin"
 
-mkdir -p /root/.mozbuild
-
-(cd mozilla-central && ../mach-bootstrap.expect)
+if [ !-d /root/.mozbuild ]; then
+	mkdir -p /root/.mozbuild
+	(cd mozilla-central && ../mach-bootstrap.expect)
+fi
 
 (cd mozilla-central && ./mach build)
