@@ -1,4 +1,4 @@
-# Let's build Firefox with Earthly
+# Let's build Firefox in a container
 
 Trying to get a reasonable Firefox build done in a container environment.
 
@@ -9,8 +9,6 @@ This should use your working copy of mozilla-central in the current directory.
 
 # How to build (WIP, not working yet)
 
-1. Run `setup.sh` to expand and move the Earthly cache
+1. Check out mozilla-central in this directory: `hg clone https://hg.mozilla.org/mozilla-central/ mozilla-central`
 
-2. Check out mozilla-central in this directory: `hg clone https://hg.mozilla.org/mozilla-central/ mozilla-central`
-
-3. `earth +build`
+2. Run `build.sh` to make the container and do a build in the container.
